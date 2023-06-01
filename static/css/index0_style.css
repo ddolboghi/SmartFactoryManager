@@ -5,14 +5,34 @@
     font-style: normal;
 }
 
-html { 
-    background: url('../images/cosmetic-background.jpg') no-repeat center fixed;
+/*html { 
+    background: url('../images/backmedia.mp4') no-repeat center fixed;
     background-size: cover;
-}
+}*/
 
 body {
     user-select: none;
+    padding: 0px; 
+    margin: 0px;
 }
+
+.bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.7;
+}
+  
+.bg-video__content {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;    
+}
+.jb-text { position: absolute; top: 50%; width: 100%; }
+.jb-text p { margin-top: -24px; text-align: center; font-size: 48px; color: #ffffff; }
 
 .overlay {
     position: fixed;
@@ -20,7 +40,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.77);
+    /* background-color: rgba(255, 255, 255, 0.977); */
     z-index: -1;
 }
 
