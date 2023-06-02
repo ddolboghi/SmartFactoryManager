@@ -1,11 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sound Analysis</title>
-</head>
-<body>
-    <h1>Sound Analysis Results</h1>
-    <p>{{ result }}</p>
-    <a href="/">Go Back Home</a>
-</body>
-</html>
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <title>Sound Analysis</title>
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sound_style.css') }}">
+ </head>
+ <body>
+     <h1>Sound Analysis Results</h1>
+     {% if pred_y == 0 %}
+         <p>현재 입력한 팬사운드는 정상으로 예측됩니다.</p>
+     {% else %}
+         <p>현재 입력한 팬 사운드는 문제가 있는 것으로 예측됩니다.</p>
+         <div class="box">
+             <h2>예상되는 불량 인자</h2>
+             <ul>
+                 {% for ment in ments %}
+                 <li>{{ ment }}</li>
+                 {% endfor %}
+             </ul>
+         </div>
+     {% endif %}
+ 
+     <a href="/">Go Back Home</a>
+     <a href="javascript:history.back()">다른 음원 파일 업로드</a> 
+ </body>
+ </html>
+ 
