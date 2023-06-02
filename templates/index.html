@@ -8,15 +8,46 @@
     <link rel="stylesheet" href="../static/css/index0_style.css">
 </head>
 <body>
-    <div class="overlay"></div>
-    <div class="img-container">
-        <img class="img" src="../static/images/main_image.jpg" alt="no image">
-    </div>
     <div class="main">
-        <h2> 자동차 부품 제조 공정 실시간 이상탐지 </h2>
-        <button class="btn" onclick="location.href='/door'"> 도어 </button>
-        <button class="btn" onclick="location.href='/molding'"> 윈드실드 몰딩 </button>
-        <button class="btn" onclick="location.href='/drying'"> 열풍 건조 기계 </button>
+        <h2>Smart Factory Manager</h2>
     </div>
+    <section style="display: flex;">
+        <div class="item" id="item1">
+          <a href="/door">
+            <div>
+              <h2>
+                <p>도어</p>
+              </h2>
+              <p>
+                <span id="text1">도어 제조 공정 중 스크래치 또는 외관 손상이 발생한 제품을 판별</span>
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="item" id="item2">
+          <a href="/molding">
+            <div>
+              <h2>
+                <p>윈드실드 몰딩</p>
+              </h2>
+              <p>
+                <span id="text2">열화상 데이터를 이용한 윈드실드 가스 사출 공정에서 양불 판정</span>
+              </p>
+            </div>
+          </a>
+        </div>
+        <div class="item" id="item3">
+          <a href="/drying">
+            <div>
+              <h2>
+                <p>열풍 건조 기계</p>
+              </h2>
+              <p>
+                <span id="text3">도금 공정 시 사용하는 열풍 건조 기계의 사운드 데이터를 이용한 설비 이상 탐지</span>
+              </p>
+            </div>
+          </a>
+        </div>
+    </section>
 </body>
 </html>
