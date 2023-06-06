@@ -112,7 +112,6 @@ def molding():
 def drying():
     if request.method == 'POST':
         audio_files = request.files.getlist('audio')
-  
 
         df = pd.DataFrame(columns=['mfcc_min', 'mfcc_max', 'spectrum_min', 'spectrum_max'])
         df['NG'] = 0
@@ -127,7 +126,7 @@ def drying():
             err, ser = librosa.load(audio_file, sr=100)
             left_spectrum, left_f_ng = mk_Frequency(err, ser)
             mfcc = librosa.feature.mfcc(y=err, sr=ser)
-            
+
             if 'error' in audio_file.filename:
                 ng.append(1)
             else:
@@ -146,36 +145,31 @@ def drying():
 
         data = df.iloc[:, :-2]
         # target = df.iloc[:, -1:]
-        
+
         ments = []
-        
+
         if mfcc.min() < -411 :
             ments.append("mfcc_min")
         elif ((mfcc.max() > 33) and mfcc.max() < 20 ):
-            ments.append("mfcc_max")            
-            
+            ments.append("mfcc_max")
+
         with open('C:\\SmartFactoryManager\\model.dtc', 'rb') as file:
             loaded_model = pickle.load(file)
 
         pred_y = loaded_model.predict(data)
-       
-        
-        return render_template('/sound/sound.html', pred_y = pred_y, ments = ments)
 
+        return render_template('/sound/sound.html', pred_y=pred_y, ments=ments)
 
     return render_template('/sound/upload.html')
 
 
 def mk_Frequency(y, sr):
-    fft = np.fft.fft(y)
+    fft = np.fft.fft(y) 
     magnitude = np.abs(fft)
     fre = np.linspace(0, sr, len(magnitude))
     haf_spectrum = magnitude[:int(len(magnitude)/2)]
     haf_fre = fre[:int(len(magnitude)/2)]
     return haf_spectrum, haf_fre
-
-
-
 
 
 

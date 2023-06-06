@@ -1,27 +1,138 @@
- <!DOCTYPE html>
- <html>
- <head>
-     <title>Sound Analysis</title>
-     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sound_style.css') }}">
- </head>
- <body>
-     <h1>Sound Analysis Results</h1>
-     {% if pred_y == 0 %}
-         <p>현재 입력한 팬사운드는 정상으로 예측됩니다.</p>
-     {% else %}
-         <p>현재 입력한 팬 사운드는 문제가 있는 것으로 예측됩니다.</p>
-         <div class="box">
-             <h2>예상되는 불량 인자</h2>
-             <ul>
-                 {% for ment in ments %}
-                 <li>{{ ment }}</li>
-                 {% endfor %}
-             </ul>
-         </div>
-     {% endif %}
- 
-     <a href="/">Go Back Home</a>
-     <a href="javascript:history.back()">다른 음원 파일 업로드</a> 
- </body>
- </html>
- 
+    <!doctype html>
+    <html lang="en">
+
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <style>
+        body {
+        background-color: white;
+        font-weight: bold;
+        }
+
+        .card_res {
+        width: 80%;
+        max-width: 400px;
+        height: 600px;
+        padding: 25px;
+        border-radius: 30px;
+        position: absolute;
+        top: 45%;
+        transform: translateY(-40%);
+        left: 0;
+        right: 0;
+        margin: auto;
+        background: rgb(204, 237, 249);
+        box-shadow: 10px 10px 30px #dfedf8, -10px -10px 30px #ffffff;
+        display: flex;
+        flex-direction: column;
+        }
+
+        .btn {
+        position: relative;
+        font-size: 17px;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 1em 2.5em;
+        border-radius: 6em;
+        align-items: center !important;
+        transition: all .2s;
+        border: none;
+        font-family: inherit;
+        font-weight: 500;
+        color: black;
+        background-color: white;
+        margin-top: 20px;
+        justify-content: center;
+        }
+
+        .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn::after {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        border-radius: 100px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        transition: all .4s;
+        }
+
+        .btn::after {
+        background-color: #fff;
+        }
+
+        .btn:hover::after {
+        transform: scaleX(1.4) scaleY(1.6);
+        opacity: 0;
+        }
+
+        .alert-info {
+        background-color: #b7e7e1; /* Change the background color */
+        text-align: center; /* Center-align the text */
+        margin-bottom: 20px; /* Add some margin at the bottom */
+        }
+    </style>
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Smart Factory Manager</title>
+    </head>
+
+    <body>
+    <div class="text-center">
+        <h1>Smart Factory Manager</h1>
+    </div>
+    <form class="form-signin card_res" method="post" enctype="multipart/form-data">
+        <div style="text-align: center;">
+        <img class="mb-4" src="https://www.hyundai.com/contents/mainbanner/sonata-23fl-m.png" alt="" width="240">
+        <!-- <img class="mb-4" src="data:image/jpeg;base64,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" alt="" width="240"> -->
+        </div>
+        <h2 class="text-center">Sound Analysis Results:</h2>
+        <!-- <img class="img-fluid" src="{{ url_for('static', filename=result_image) }}" alt="User_Image" max-width="100%" height="auto"> -->
+        <!-- Show the names of the detected classes and their probabilities -->
+        {% if pred_y == 0 %}
+            <p>현재 입력한 팬사운드는 정상으로 예측됩니다.</p>
+        {% else %}
+        <p>현재 입력한 팬 사운드는 문제가 있는 것으로 예측됩니다. 확인 부탁드립니다.</p>
+        <div class="alert alert-info" role="alert">
+            <h4 style="font-weight: bold;">불량으로 예상되는 인자</h4>
+
+                {% for ment in ments %}
+                <li>{{ ment }}</li>
+                {% endfor %}
+            
+            </div>
+        {% endif %}
+    
+        <div class="text-center">
+        <a href="/">Go Back Home ||</a> 
+        <a href="javascript:history.back()">Test Another Sound</a> 
+        </div>
+    
+    </form>
+    
+    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <script src="/static/script.js"></script>
+    </body>
+
+    </html>
