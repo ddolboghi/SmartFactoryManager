@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Temperature Result</title>
+</head>
+<body>
+    <h1>Temperature Result</h1>
+    <table>
+        <tr>
+            <th>X_data</th>
+            <th>pred_y</th>
+        </tr>
+        {% for row in result.iterrows() %}
+        <tr>
+            <td>{{ row[1]['X_data'] }}</td>
+            <td>{{ row[1]['pred_y'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

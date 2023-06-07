@@ -1,6 +1,8 @@
 # app.py
 from flask import Flask, request, render_template, redirect
 from tensorflow.keras.models import load_model
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import *
 # 데이터 분석 툴
 import pandas as pd
 import numpy as np
@@ -107,18 +109,52 @@ if model_name is not None:
 def molding():
     return render_template('molding/index3.html')
 
-# 오준, 재윤
-@app.route('/drying', methods=['GET', 'POST'])
-def drying():
+# 재윤 
+@app.route('/temp')
+def temp():
     ## 온도 데이터
     ### data ~~~~ 전처리 
-    df = pd.read_csv("./test_data.csv")
-
+    TIME_STEP=36
+    def create_sequences(X, y, time_steps=TIME_STEP):
+        Xs, ys = [], []
+        for i in range(len(X)-time_steps):
+            Xs.append(X.iloc[i:(i+time_steps)].values)
+            ys.append(y.iloc[i:(i+time_steps)].values)
+            # ys.append(y.iloc[i+time_steps])
+        return np.array(Xs), np.array(ys)
     
-    lstm_ae1 = load_model('./lstm-ae1.h5')
+    def flatten(X):
+        # 다차원 -> 1차원 변환 함수
+        flattened_X = np.empty((X.shape[0], X.shape[2]))  
+        for i in range(X.shape[0]):
+            flattened_X[i] = X[i, (X.shape[1]-1), :]
+        return (flattened_X)
+    
+    ## train 정상데이터 범위 -2.003755e+00~ 6.055034e+00
+    
+    X_data = pd.read_csv("./X_data.csv")
+    test_data = pd.read_csv("./test_data.csv")
+    X_data = X_data[:2016]
+    test_data = test_data[:2016]
+    X_test, Y_test = create_sequences(X_data[['Temp']], test_data[['NG']])
+    lstm_ae1 = load_model('C:/SmartFactoryManager/lstm-ae1.h5')
     prediction = lstm_ae1.predict(X_test) 
     
-    ### 예측값 페이지에 출력 (5초 주기?) 
+    label = flatten(Y_test).reshape(-1)
+
+    mse = np.mean(np.power(X_test - prediction, 2), axis=1)
+    error_df = pd.DataFrame({'reconstruction_error': mse.reshape(-1),
+                            'true_class':label}) 
+    best_thr = np.percentile(mse.reshape(-1),93)
+    pred_y = ["불량" if e > best_thr else "정상" for e in error_df['reconstruction_error'].values]
+    result = '\n'.join(pred_y)
+    
+    # Render the result in an HTML template
+    return render_template('sound/temp.html', result=result)
+
+# 오준
+@app.route('/drying', methods=['GET', 'POST'])
+def drying():
     ## 팬 사운드 데이터
     if request.method == 'POST':
         audio_files = request.files.getlist('audio')
