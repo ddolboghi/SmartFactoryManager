@@ -105,15 +105,26 @@
         {% if pred_y == 0 %}
             <p>현재 입력한 팬사운드는 정상으로 예측됩니다.</p>
         {% else %}
-        <p>현재 입력한 팬 사운드는 문제가 있는 것으로 예측됩니다. 확인 부탁드립니다.</p>
+        <p>현재 입력한 팬 사운드는 문제가 있는 것으로 <br> 예측됩니다. 확인 부탁드립니다.</p>
         <div class="alert alert-info" role="alert">
             <h4 style="font-weight: bold;">불량으로 예상되는 인자</h4>
 
+
                 {% for ment in ments %}
-                <li>{{ ment }}</li>
-                {% endfor %}
+                <li>
+                    {% if ment == "mfcc_min" %}
+                        {{ ment }}: {{ mfcc_min[0] }}
+                    {% elif ment == "mfcc_max" %}
+                        {{ ment }}: {{ mfcc_max[0] }}
+                    {% elif ment == "spectrum_min" %}
+                        {{ ment }}: {{ spectrum_min[0] }}   
+
+                    {% endif %}
+                </li>
+            {% endfor %}
             
-            </div>
+
+        </div>
         {% endif %}
     
         <div class="text-center">

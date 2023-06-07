@@ -110,6 +110,16 @@ def molding():
 # 오준, 재윤
 @app.route('/drying', methods=['GET', 'POST'])
 def drying():
+    ## 온도 데이터
+    ### data ~~~~ 전처리 
+    df = pd.read_csv("./test_data.csv")
+
+    
+    lstm_ae1 = load_model('./lstm-ae1.h5')
+    prediction = lstm_ae1.predict(X_test) 
+    
+    ### 예측값 페이지에 출력 (5초 주기?) 
+    ## 팬 사운드 데이터
     if request.method == 'POST':
         audio_files = request.files.getlist('audio')
 
@@ -158,7 +168,7 @@ def drying():
 
         pred_y = loaded_model.predict(data)
 
-        return render_template('/sound/sound.html', pred_y=pred_y, ments=ments)
+        return render_template('/sound/sound.html', pred_y=pred_y, ments=ments, mfcc_min = mfcc_min, mfcc_max = mfcc_max, spectrum_min = spectrum_min)
 
     return render_template('/sound/upload.html')
 
