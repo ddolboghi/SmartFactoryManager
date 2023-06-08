@@ -116,7 +116,10 @@ footer {
     opacity: 0;
 }
 
-.content {
+.card {
     align-items: center;
     text-align: center;
-  }
+    width: 250px;
+}
+
+a {}
