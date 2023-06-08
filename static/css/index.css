@@ -115,10 +115,17 @@ footer {
     opacity: 0;
 }
 
-.pt-page {
-    transition: transform 0.3s ease-in-out;
+.navbar{opacity: 1;}
+.nav-link , .navbar-brand{ color: #000000; cursor: pointer;}
+.navbar-collapse{ justify-content: flex-end;}
+.navbar-toggler{  background:#fff !important;}
+.navbar-collapse{
+    justify-content: flex-end;
 }
 
-.pt-page.transition-effect {
-    transform: translateY(-100%);
+body{
+    animation: fadein 2000ms ease-out;
+    -moz-animation: fadein 2000ms ease-out; /* Firefox */
+    -webkit-animation: fadein 2000ms ease-out; /* Safari and  Chrome */
+    -o-animation: fadein 2000ms ease-out; /* Opera */
 }

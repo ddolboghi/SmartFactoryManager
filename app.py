@@ -39,6 +39,7 @@ app.debug=True
 def start():
     return render_template('main.html')
 
+
 # 민경
 RESULT_FOLDER = os.path.join('static')
 app.config['RESULT_FOLDER'] = RESULT_FOLDER
@@ -129,27 +130,30 @@ def temp():
             flattened_X[i] = X[i, (X.shape[1]-1), :]
         return (flattened_X)
     
-    ## train 정상데이터 범위 -2.003755e+00~ 6.055034e+00
-    
     X_data = pd.read_csv("./X_data.csv")
     test_data = pd.read_csv("./test_data.csv")
-    X_data = X_data[:2016]
-    test_data = test_data[:2016]
-    X_test, Y_test = create_sequences(X_data[['Temp']], test_data[['NG']])
+    learn_data = test_data[:2016]
+    
+    X_test, Y_test = create_sequences(test_data[['Temp']], test_data[['NG']])
     lstm_ae1 = load_model('./lstm-ae1.h5')
     prediction = lstm_ae1.predict(X_test) 
     
     label = flatten(Y_test).reshape(-1)
-
+    
     mse = np.mean(np.power(X_test - prediction, 2), axis=1)
     error_df = pd.DataFrame({'reconstruction_error': mse.reshape(-1),
                             'true_class':label}) 
     best_thr = np.percentile(mse.reshape(-1),93)
+
     pred_y = ["불량" if e > best_thr else "정상" for e in error_df['reconstruction_error'].values]
-    result = '\n'.join(pred_y)
-    
+    temp_values = test_data['Temp'][:len(pred_y)]
+    process_values = test_data['Process'][:len(pred_y)]
+    # result = {temp_values[i]: pred_y[i] for i in range(len(pred_y))}
+    result = {temp_values[i]: {'process': process_values[i], 'prediction': pred_y[i]} for i in range(len(pred_y))}
+
     # Render the result in an HTML template
     return render_template('sound/temp.html', result=result)
+
 
 # 오준
 @app.route('/drying', methods=['GET', 'POST'])
@@ -203,9 +207,9 @@ def drying():
 
         pred_y = loaded_model.predict(data)
 
-        return render_template('./sound/sound.html', pred_y=pred_y, ments=ments, mfcc_min = mfcc_min, mfcc_max = mfcc_max, spectrum_min = spectrum_min)
+        return render_template('/sound/sound.html', pred_y=pred_y, ments=ments, mfcc_min = mfcc_min, mfcc_max = mfcc_max, spectrum_min = spectrum_min)
 
-    return render_template('./sound/upload.html')
+    return render_template('/sound/upload.html')
 
 
 def mk_Frequency(y, sr):
