@@ -39,7 +39,6 @@ app.debug=True
 def start():
     return render_template('main.html')
 
-
 # 민경
 RESULT_FOLDER = os.path.join('static')
 app.config['RESULT_FOLDER'] = RESULT_FOLDER
@@ -137,7 +136,7 @@ def temp():
     X_data = X_data[:2016]
     test_data = test_data[:2016]
     X_test, Y_test = create_sequences(X_data[['Temp']], test_data[['NG']])
-    lstm_ae1 = load_model('C:/SmartFactoryManager/lstm-ae1.h5')
+    lstm_ae1 = load_model('./lstm-ae1.h5')
     prediction = lstm_ae1.predict(X_test) 
     
     label = flatten(Y_test).reshape(-1)
@@ -199,14 +198,14 @@ def drying():
         elif ((mfcc.max() > 33) and mfcc.max() < 20 ):
             ments.append("mfcc_max")
 
-        with open('C:\\SmartFactoryManager\\model.dtc', 'rb') as file:
+        with open('./model.dtc', 'rb') as file:
             loaded_model = pickle.load(file)
 
         pred_y = loaded_model.predict(data)
 
-        return render_template('/sound/sound.html', pred_y=pred_y, ments=ments, mfcc_min = mfcc_min, mfcc_max = mfcc_max, spectrum_min = spectrum_min)
+        return render_template('./sound/sound.html', pred_y=pred_y, ments=ments, mfcc_min = mfcc_min, mfcc_max = mfcc_max, spectrum_min = spectrum_min)
 
-    return render_template('/sound/upload.html')
+    return render_template('./sound/upload.html')
 
 
 def mk_Frequency(y, sr):
