@@ -151,6 +151,7 @@
             margin-top: 0;
         }
 
+<<<<<<< HEAD
         .table-container {
             width: 50%;
             height: 300px;
@@ -161,6 +162,12 @@
         table {
             border-collapse: collapse;
             width: 100%;
+=======
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin-top: 20px;
+>>>>>>> 306ddf65139c26f0f338688b06d45bf0d11ad634
         }
         
         th, td {
@@ -201,6 +208,7 @@
         .custom-button:hover {
             background-color: #ffc200;
         }
+<<<<<<< HEAD
 
         .sticky {
             position: sticky;
@@ -208,10 +216,13 @@
             background-color: #f2f2f2;
             z-index: 1;
         }
+=======
+>>>>>>> 306ddf65139c26f0f338688b06d45bf0d11ad634
     </style>
 </head>
 <body>
     <h1>Temperature Result</h1>
+<<<<<<< HEAD
     <div class="table-container">
         <table>
             <thead>
@@ -232,6 +243,26 @@
             </tbody>
         </table>
     </div>
+=======
+    <table>
+        <thead>
+            <tr>
+                <th>Process</th>
+                <th>Temp</th>
+                <th class="{% if result['Temp'] == '불량' %}defective{% endif %}">Prediction</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for temp, data in result.items() %}
+            <tr {% if data['prediction'] == '불량' %}class="defective"{% endif %}>
+                <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['process'] }}</td>
+                <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ temp }}</td>
+                <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['prediction'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+>>>>>>> 306ddf65139c26f0f338688b06d45bf0d11ad634
 
     <div class="button-container">
         <a href="http://127.0.0.1:5000/drying">
@@ -240,19 +271,29 @@
     </div>
     
     <script>
+<<<<<<< HEAD
         var tableContainer = document.querySelector(".table-container");
         var table = tableContainer.querySelector("table");
         var tableRows = tableContainer.querySelectorAll("tbody tr");
+=======
+        var table = document.querySelector("table");
+        var tableRows = document.querySelectorAll("table tbody tr");
+>>>>>>> 306ddf65139c26f0f338688b06d45bf0d11ad634
 
         // 결과를 1줄씩 출력하는 함수
         function showResults(index) {
             tableRows[index].style.display = "table-row";
 
+<<<<<<< HEAD
             // 스크롤이 맨 아래에 위치하지 않으면 스크롤을 내리지 않습니다.
             if (tableContainer.scrollTop === tableContainer.scrollHeight - tableContainer.clientHeight) {
                 // 스크롤을 아래로 이동합니다.
                 tableContainer.scrollTop = tableContainer.scrollHeight;
             }
+=======
+            // 스크롤을 아래로 이동합니다.
+            table.scrollTop = table.scrollHeight;
+>>>>>>> 306ddf65139c26f0f338688b06d45bf0d11ad634
 
             // 5초 후에 다음 인덱스로 이동합니다.
             if (index < tableRows.length - 1) {

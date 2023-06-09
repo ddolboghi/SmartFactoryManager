@@ -8,9 +8,37 @@
     <link rel="stylesheet" href="../static/css/index.css">
     <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/865415b7db.js" crossorigin="anonymous"></script>
+    <script defer src="../static/js/fixed.js"></script>
 </head>
 <body>
-    {% block content %}{% endblock content %}        
+    <!-- navbar -->  
+    <nav class="navbar navbar-expand-lg fixed-top ">  
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">  
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">     
+            <ul class="navbar-nav mr-4">
+                <li class="nav-item">
+                    <a class="nav-link" data-value="door" href="/door">도어</a>        
+                </li>  
+                <li class="nav-item">
+                    <a class="nav-link " data-value="molding"href="/molding">윈드실드</a>    
+                </li>
+                <li class="nav-item"> 
+                    <a class="nav-link " data-value="temp" href="/temp">열풍건조기계</a>         
+                </li>   
+                <li class="nav-item">  
+                    <a class="nav-link " data-value="team" href="#">Team</a>       
+                </li>   
+            </ul> 
+        </div>
+    </nav>
+    <main id="swup" class="transition-fade">
+        {% block content %}{% endblock content %}
+    </main>
+
+    <!-- footer -->
     <footer>
         <div>
             <div>
@@ -24,8 +52,14 @@
             </div>
         </div>
     </footer>
-    <script src="../static/js/nav.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
 </body>
 </html>

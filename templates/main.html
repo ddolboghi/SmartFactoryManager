@@ -1,19 +1,46 @@
 {% extends 'fixed.html' %}
 {% block content %}
+<!-- <div class="pt-triggers">
+    <div id="dl-menu" class="dl-menuwrapper">
+        <button class="dl-trigger">Choose a transition</button>
+        <ul class="dl-menu">
+            <li data-animation="3"><a href="/door">move</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="pt-main" class="pt-perspective">
+    <div class="pt-page">
+        <div class="bg-video">
+            <video class="bg-video__content" autoplay muted loop>
+              <source src="../static/images/backmedia.mp4" type="video/mp4" />
+              Your browser is not supported!
+            </video>
+        </div>
+        <div class="title">
+            <h2>SMART FACTORY MANAGER</h2>
+        </div>
+    </div>
+    <div class="pt-page">
+        <div class="list-group mx-auto">
+            <a href="/door" class="list-group-item list-group-item-action">도어 검사</a>
+            <a href="/molding" class="list-group-item list-group-item-action">윈드실드 검사</a>
+            <a href="/temp" class="list-group-item list-group-item-action">열풍건조기계 이상탐지</a>
+        </div>
+    </div>
+</div>
+
+<div class="pt-message">
+    <p>Your browser does not support CSS animations.</p>
+</div> -->
+
 <div class="bg-video">
     <video class="bg-video__content" autoplay muted loop>
-      <source src="static\images\backmedia.mp4" type="video/mp4" />
+      <source src="../static/images/backmedia.mp4" type="video/mp4" />
       Your browser is not supported!
     </video>
 </div>
 <div class="title">
     <h2>SMART FACTORY MANAGER</h2>
 </div>
-<div class="card mx-auto">
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><a href="/door">도어 검사</a></li>
-      <li class="list-group-item"><a href="/molding">윈드실드 검사</a></li>
-      <li class="list-group-item"><a href="/temp">열풍건조기계 이상탐지</a></li>
-    </ul>
-  </div>
 {% endblock content %}
