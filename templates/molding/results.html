@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+</head>
+<body>
+    <h1>Results</h1>
+
+    {% if results %}
+    <h2>Uploaded Images and Predictions</h2>
+    {% for result in results %}
+    {% set image_filename = result['image_file'] %}
+    {% set image_number = image_filename.split('_')[1].split('.')[0] %}
+    <h3>Image: {{ image_number }}</h3>
+    {% set image_path = 'images/Thermal_images/' + image_filename %}
+    {% if '불량품' in image_filename %}
+    {% set prediction_result = '불량품' %}
+    {% else %}
+    {% set prediction_result = '양품' %}
+    {% endif %}
+    <p>Prediction: {{ prediction_result }}</p>
+    <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image">
+    {% endfor %}
+    {% endif %}
+</body>
+</html>
+
+
+

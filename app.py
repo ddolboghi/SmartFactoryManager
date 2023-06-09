@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, url_for
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import *
@@ -20,6 +20,8 @@ from sklearn import metrics
 import io
 import torch
 from PIL import Image
+# 몰딩용
+from werkzeug.utils import secure_filename
 
 
 # 경고 방지
@@ -105,9 +107,55 @@ if model_name is not None:
     model.eval()
 
 # 승훈
-@app.route('/molding')
-def molding():
+model_path = os.path.join(app.root_path, 'templates', 'molding', 'model.h5')
+model = load_model(model_path)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/molding', methods=['GET', 'POST'])
+def windshield_molding():
     return render_template('molding/index3.html')
+
+@app.route('/results', methods=['POST'])
+def results():
+    if 'file' not in request.files:
+        return redirect(url_for('molding'))
+
+    files = request.files.getlist('file')
+
+    results = []
+
+    for file in files:
+        image = Image.open(file)
+        # 이미지 처리
+        processed_image = preprocess_image(image)
+        # 예측
+        result = model.predict(processed_image)
+        result = result.flatten()
+        results.append({'image_file': file.filename, 'prediction': result})
+
+    return render_template('molding/results.html', results=results)
+
+
+def preprocess_image(image):
+    # 이미지 전처리 로직을 구현하세요
+    # 예시: 이미지 크기 조정, 정규화 등
+    image = image.resize((224, 224))
+    image = np.array(image) / 255.0
+    image = np.expand_dims(image, axis=0)
+    return image
+
+def predict(image):
+    # 모델 예측
+    prediction = model.predict(image)
+    return prediction
+
+def file_exists(file_path):
+    return os.path.exists(file_path)
+
+# Register the custom filter in the Jinja2 environment
+app.jinja_env.filters['file_exists'] = file_exists
 
 # 재윤 
 @app.route('/temp')
