@@ -132,7 +132,7 @@ def temp():
     
     test_data = pd.read_csv("./test_data.csv")
     # learn_data =  실시간 학습 구현을 위한 학습데이터 불러오기 
-    
+    test_data = test_data[:2016]
     X_test, Y_test = create_sequences(test_data[['Temp']], test_data[['NG']])
     lstm_ae1 = load_model('./lstm-ae1.h5')
     prediction = lstm_ae1.predict(X_test) 
