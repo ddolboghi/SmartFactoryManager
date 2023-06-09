@@ -130,9 +130,8 @@ def temp():
             flattened_X[i] = X[i, (X.shape[1]-1), :]
         return (flattened_X)
     
-    X_data = pd.read_csv("./X_data.csv")
     test_data = pd.read_csv("./test_data.csv")
-    learn_data = test_data[:2016]
+    # learn_data =  실시간 학습 구현을 위한 학습데이터 불러오기 
     
     X_test, Y_test = create_sequences(test_data[['Temp']], test_data[['NG']])
     lstm_ae1 = load_model('./lstm-ae1.h5')
@@ -148,7 +147,6 @@ def temp():
     pred_y = ["불량" if e > best_thr else "정상" for e in error_df['reconstruction_error'].values]
     temp_values = test_data['Temp'][:len(pred_y)]
     process_values = test_data['Process'][:len(pred_y)]
-    # result = {temp_values[i]: pred_y[i] for i in range(len(pred_y))}
     result = {temp_values[i]: {'process': process_values[i], 'prediction': pred_y[i]} for i in range(len(pred_y))}
 
     # Render the result in an HTML template

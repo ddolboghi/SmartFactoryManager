@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Temperature Result</title>
@@ -15,10 +15,16 @@
             margin-top: 0;
         }
 
+        .table-container {
+            width: 50%;
+            height: 300px;
+            overflow-y: scroll;
+            margin-top: 20px;
+        }
+
         table {
             border-collapse: collapse;
-            width: 50%;
-            margin-top: 20px;
+            width: 100%;
         }
         
         th, td {
@@ -59,28 +65,37 @@
         .custom-button:hover {
             background-color: #ffc200;
         }
+
+        .sticky {
+            position: sticky;
+            top: 0;
+            background-color: #f2f2f2;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
     <h1>Temperature Result</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Process</th>
-                <th>Temp</th>
-                <th class="{% if result['Temp'] == '불량' %}defective{% endif %}">Prediction</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for temp, data in result.items() %}
-            <tr {% if data['prediction'] == '불량' %}class="defective"{% endif %}>
-                <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['process'] }}</td>
-                <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ temp }}</td>
-                <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['prediction'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="sticky">Process</th>
+                    <th class="sticky">Temp</th>
+                    <th class="sticky {% if result['Temp'] == '불량' %}defective{% endif %}">Prediction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for temp, data in result.items() %}
+                <tr {% if data['prediction'] == '불량' %}class="defective"{% endif %}>
+                    <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['process'] }}</td>
+                    <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ temp }}</td>
+                    <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['prediction'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <div class="button-container">
         <a href="http://127.0.0.1:5000/drying">
@@ -89,15 +104,155 @@
     </div>
     
     <script>
-        var table = document.querySelector("table");
-        var tableRows = document.querySelectorAll("table tbody tr");
+        var tableContainer = document.querySelector(".table-container");
+        var table = tableContainer.querySelector("table");
+        var tableRows = tableContainer.querySelectorAll("tbody tr");
 
         // 결과를 1줄씩 출력하는 함수
         function showResults(index) {
             tableRows[index].style.display = "table-row";
 
             // 스크롤을 아래로 이동합니다.
-            table.scrollTop = table.scrollHeight;
+            tableContainer.scrollTop = tableContainer.scrollHeight;
+
+            // 5초 후에 다음 인덱스로 이동합니다.
+            if (index < tableRows.length - 1) {
+                setTimeout(function () {
+                    showResults(index + 1); // 다음 행을 표시합니다.
+                }, 500);
+            }
+        }
+
+        // 초기에는 결과를 모두 숨깁니다.
+        for (var i = 0; i < tableRows.length; i++) {
+            tableRows[i].style.display = "none";
+        }
+
+        // 첫 번째 행부터 결과를 출력합니다.
+        showResults(0);
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Temperature Result</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .table-container {
+            width: 50%;
+            height: 300px;
+            overflow-y: scroll;
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .defective {
+            background-color: yellow;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .button-container a {
+            text-decoration: none;
+        }
+
+        .custom-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #ffcc00;
+            color: #000;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-button:hover {
+            background-color: #ffc200;
+        }
+
+        .sticky {
+            position: sticky;
+            top: 0;
+            background-color: #f2f2f2;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Temperature Result</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="sticky">Process</th>
+                    <th class="sticky">Temp</th>
+                    <th class="sticky {% if result['Temp'] == '불량' %}defective{% endif %}">Prediction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for temp, data in result.items() %}
+                <tr {% if data['prediction'] == '불량' %}class="defective"{% endif %}>
+                    <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['process'] }}</td>
+                    <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ '{:.3f}'.format(temp) }}</td>
+                    <td {% if data['prediction'] == '불량' %}class="defective"{% endif %}>{{ data['prediction'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="button-container">
+        <a href="http://127.0.0.1:5000/drying">
+            <button class="custom-button">Go to Fan Sound</button>
+        </a>
+    </div>
+    
+    <script>
+        var tableContainer = document.querySelector(".table-container");
+        var table = tableContainer.querySelector("table");
+        var tableRows = tableContainer.querySelectorAll("tbody tr");
+
+        // 결과를 1줄씩 출력하는 함수
+        function showResults(index) {
+            tableRows[index].style.display = "table-row";
+
+            // 스크롤이 맨 아래에 위치하지 않으면 스크롤을 내리지 않습니다.
+            if (tableContainer.scrollTop === tableContainer.scrollHeight - tableContainer.clientHeight) {
+                // 스크롤을 아래로 이동합니다.
+                tableContainer.scrollTop = tableContainer.scrollHeight;
+            }
 
             // 5초 후에 다음 인덱스로 이동합니다.
             if (index < tableRows.length - 1) {
