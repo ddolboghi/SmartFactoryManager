@@ -1,127 +1,25 @@
-<!doctype html>
-<html lang="en">
+{% extends 'fixed.html' %}
+{% block content %}
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <style>
-    body {
-      background-color: white;
-      font-weight: bold;
-    }
-
-    .card_res {
-      width: 80%;
-      max-width: 400px;
-      height: 600px; /* Increase the height of the box */
-      padding: 25px;
-      border-radius: 30px;
-      position: absolute;
-      top: 45%;
-      transform: translateY(-40%);
-      left: 0;
-      right: 0;
-      margin: auto;
-      margin-bottom: 100px; /* Increase the bottom margin */
-      background: rgb(204, 237, 249);
-      box-shadow: 10px 10px 30px #dfedf8, -10px -10px 30px #ffffff;
-    }
-    
-
-    .btn {
-      position: relative;
-      font-size: 17px;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 1em 2.5em;
-      border-radius: 6em;
-      align-items: center !important;
-      transition: all .2s;
-      border: none;
-      font-family: inherit;
-      font-weight: 500;
-      color: black;
-      background-color: white;
-      margin-top: 20px;
-      justify-content: center;
-    }
-
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn:active {
-      transform: translateY(-1px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn::after {
-      content: "";
-      display: inline-block;
-      height: 100%;
-      width: 100%;
-      border-radius: 100px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      transition: all .4s;
-    }
-
-    .btn::after {
-      background-color: #fff;
-    }
-
-    .btn:hover::after {
-      transform: scaleX(1.4) scaleY(1.6);
-      opacity: 0;
-    }
-
-    .alert-info {
-      background-color: #b7e7e1; /* Change the background color */
-      text-align: center; /* Center-align the text */
-      margin-bottom: 20px; /* Add some margin at the bottom */
-    }
-  </style>
-  <link rel="stylesheet" href="/static/css/style.css">
-  <title>Smart Factory Manager</title>
-</head>
-
-<body>
-  <div class="text-center">
-    <h1>Smart Factory Manager</h1>
+<div class="text-center">
+  <h1>Smart Factory Manager</h1>
+</div>
+<form class="form-signin card_res" method="post" enctype="multipart/form-data">
+  <img class="mb-4 center-align" src="https://www.hyundai.com/contents/mainbanner/sonata-23fl-m.png" alt="" width="240">
+  <h2 class="h3 mb-3 font-weight-normal custom-title center-align">Vehicle Door Surface <br> Defect Detection:</h2>    
+  <img class="img-fluid" src="{{ url_for('static', filename=result_image) }}" alt="User_Image" max-width="100%" height="auto">
+  <!-- Show the names of the detected classes and their probabilities -->
+  {% for class_name, prob in class_names_and_probs %}
+  <div class="alert alert-info" role="alert">
+    <strong>{{ class_name }}</strong> 
+    {% if prob != 1 %}
+      <br><strong>확률: </strong> {{ prob }}
+    {% endif %}
   </div>
-  <form class="form-signin card_res" method="post" enctype="multipart/form-data">
-    <img class="mb-4 center-align" src="https://www.hyundai.com/contents/mainbanner/sonata-23fl-m.png" alt="" width="240">
-    <h2 class="h3 mb-3 font-weight-normal custom-title center-align">Vehicle Door Surface <br> Defect Detection:</h2>    
-    <img class="img-fluid" src="{{ url_for('static', filename=result_image) }}" alt="User_Image" max-width="100%" height="auto">
-    <!-- Show the names of the detected classes and their probabilities -->
-    {% for class_name, prob in class_names_and_probs %}
-    <div class="alert alert-info" role="alert">
-      <strong>{{ class_name }}</strong> 
-      {% if prob != 1 %}
-        <br><strong>확률: </strong> {{ prob }}
-      {% endif %}
-    </div>
-    {% endfor %}
+  {% endfor %}
 
-    <div class="text-center">
-      <button class="btn btn-lg btn-primary">Test Another Image</button>
-    </div>
-  </form>
-  <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-    crossorigin="anonymous"></script>
-  <script src="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-    crossorigin="anonymous"></script>
-  <script src="/static/script.js"></script>
-</body>
-
-</html>
+  <div class="text-center">
+    <button class="btn btn-lg btn-primary">Test Another Image</button>
+  </div>
+</form>
+{% endblock content %}
