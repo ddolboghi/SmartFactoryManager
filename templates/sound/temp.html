@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Temperature Result</title>
+{% extends 'fixed.html' %}
+{% block content %}
     <style>
         body {
             display: flex;
@@ -115,5 +113,4 @@
         // 첫 번째 행부터 결과를 출력합니다.
         showResults(0);
     </script>
-</body>
-</html>
+{% endblock content %}
