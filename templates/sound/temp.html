@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
     <title>Temp Data</title>
+=======
+{% extends 'fixed.html' %}
+{% block content %}
+>>>>>>> 9fa884ac1aacea25a350e472bd5b07616c599acb
     <style>
         /* CSS 스타일 */
         #container {
@@ -293,6 +298,33 @@
             <canvas id="current-chart"></canvas>
         </div>
 
+<<<<<<< HEAD
     </div>
 </body>
 </html>
+=======
+        // 결과를 1줄씩 출력하는 함수
+        function showResults(index) {
+            tableRows[index].style.display = "table-row";
+
+            // 스크롤을 아래로 이동합니다.
+            table.scrollTop = table.scrollHeight;
+
+            // 5초 후에 다음 인덱스로 이동합니다.
+            if (index < tableRows.length - 1) {
+                setTimeout(function () {
+                    showResults(index + 1); // 다음 행을 표시합니다.
+                }, 500);
+            }
+        }
+
+        // 초기에는 결과를 모두 숨깁니다.
+        for (var i = 0; i < tableRows.length; i++) {
+            tableRows[i].style.display = "none";
+        }
+
+        // 첫 번째 행부터 결과를 출력합니다.
+        showResults(0);
+    </script>
+{% endblock content %}
+>>>>>>> 9fa884ac1aacea25a350e472bd5b07616c599acb
