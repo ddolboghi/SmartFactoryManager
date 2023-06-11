@@ -22,7 +22,7 @@ import torch
 from PIL import Image
 # 몰딩용
 from werkzeug.utils import secure_filename
-
+import random   
 
 # 경고 방지
 import warnings # 워닝 방지
@@ -160,45 +160,15 @@ app.jinja_env.filters['file_exists'] = file_exists
 # 재윤 
 @app.route('/temp')
 def temp():
-    ## 온도 데이터
-    ### data ~~~~ 전처리 
-    TIME_STEP=36
-    def create_sequences(X, y, time_steps=TIME_STEP):
-        Xs, ys = [], []
-        for i in range(len(X)-time_steps):
-            Xs.append(X.iloc[i:(i+time_steps)].values)
-            ys.append(y.iloc[i:(i+time_steps)].values)
-            # ys.append(y.iloc[i+time_steps])
-        return np.array(Xs), np.array(ys)
-    
-    def flatten(X):
-        # 다차원 -> 1차원 변환 함수
-        flattened_X = np.empty((X.shape[0], X.shape[2]))  
-        for i in range(X.shape[0]):
-            flattened_X[i] = X[i, (X.shape[1]-1), :]
-        return (flattened_X)
-    
-    test_data = pd.read_csv("./test_data.csv")
-    # learn_data =  실시간 학습 구현을 위한 학습데이터 불러오기 
-    test_data = test_data[:2016]
-    X_test, Y_test = create_sequences(test_data[['Temp']], test_data[['NG']])
-    lstm_ae1 = load_model('./lstm-ae1.h5')
-    prediction = lstm_ae1.predict(X_test) 
-    
-    label = flatten(Y_test).reshape(-1)
-    
-    mse = np.mean(np.power(X_test - prediction, 2), axis=1)
-    error_df = pd.DataFrame({'reconstruction_error': mse.reshape(-1),
-                            'true_class':label}) 
-    best_thr = np.percentile(mse.reshape(-1),93)
+    result_data = pd.read_csv("./result.csv")
 
-    pred_y = ["불량" if e > best_thr else "정상" for e in error_df['reconstruction_error'].values]
-    temp_values = test_data['Temp'][:len(pred_y)]
-    process_values = test_data['Process'][:len(pred_y)]
-    result = {temp_values[i]: {'process': process_values[i], 'prediction': pred_y[i]} for i in range(len(pred_y))}
+    # Convert DataFrame to a list of dictionaries
+    data = result_data.to_dict('records')
+    random.shuffle(data)
 
     # Render the result in an HTML template
-    return render_template('sound/temp.html', result=result)
+    return render_template('sound/temp.html', data=data)
+
 
 
 
