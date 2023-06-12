@@ -1,7 +1,7 @@
 {% extends 'fixed.html' %}
 {% block content %}
 
-{% if results %}
+<!-- {% if results %}
 <h2>Uploaded Images and Predictions</h2>
 {% for result in results %}
 {% set image_filename = result['image_file'] %}
@@ -11,7 +11,7 @@
 <img src="{{ url_for('static', filename='Thermal_images/' + result['image_file']) }}" alt="Uploaded Image">
 <p>Prediction: {{ '양품' if result['prediction'][0] > result['prediction'][1] else '불량품' }}</p>
 {% endfor %}
-{% endif %}
+{% endif %} -->
 
 <form class="form-signin card mb-6" method="post" enctype="multipart/form-data" action="/results">
     <h1 class="h3 mb-3 font-weight-bold">Please upload a picture of WindShield!</h1>
@@ -27,4 +27,48 @@
         자동차윈드실드의 불량을 판정합니다.
     </p>
 </form>
+
+<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+	<div class="container py-5">
+		<div class="row g-5">
+			<div class="col-lg-7">
+				<div class="section-title position-relative pb-3 mb-5">
+					<h1 class="mb-0" style="font-family: 'NotoSansKR-Bold';">윈드실드 몰딩 가스사출 공정에서 양품 판별</h1>
+				</div>
+				<form class="form-signin card mb-6 mt-5" method="post" enctype="multipart/form-data">
+					<div class="d-flex align-items-center mb-4 wow fadeIn" data-wow-delay="0.6s">
+						<div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
+							<i class="bi bi-upload"></i>
+						</div>
+						<div class="ps-4">
+							<input type="file" name="file" class="form-control-file" id="inputfile" onchange="previewImage(this);">
+						</div>
+					</div>
+					<button type="button" id="uploadButton" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">
+						<span class="box">검사하기</span>
+					</button>
+				</form>
+				<p class="mb-4" style="font-family: 'NotoSansKR-Regular';">
+					자동차 부품 제조 공정 중, 도어 공정에서 흔히 발생하는 스크래치 불량과 외관손상 불량을 타겟으로 삼아 실시간 객체 탐지 모델을 통해 불량품을 판정합니다.
+				</p>
+				<div class="row g-0 mb-3">
+					<div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
+						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>YOLOv7</h5>
+						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>AI Hub</h5>
+					</div>
+					<div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
+						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Google Cloud Platform</h5>
+						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Jupyter Notebook</h5>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-5" style="min-height: 500px;">
+				<div class="position-relative h-100">
+					<img id="imagePreview" class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="#" style="object-fit: cover;" alt="Car door image">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock content %}
