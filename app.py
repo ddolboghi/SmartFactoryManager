@@ -1,21 +1,17 @@
 # app.py
 from flask import Flask, request, render_template, redirect, url_for
 from tensorflow.keras.models import load_model
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import *
 # 데이터 분석 툴
 import pandas as pd
 import numpy as np
 # 운영체계와 관련된 툴
 import os
-import glob
 # 시각화
 import seaborn as sns
 import matplotlib.pyplot as plt # matplotlib
 import librosa
-
 import pickle
-from sklearn import metrics
 #도어용
 import io
 import torch
@@ -58,6 +54,7 @@ def find_model():
 def get_prediction(img_bytes):
     img = Image.open(io.BytesIO(img_bytes))
     imgs = [img]
+    print(imgs)
     results = model(imgs, size=640)
 
     labels_and_probs = []
@@ -139,8 +136,7 @@ def results():
 
 
 def preprocess_image(image):
-    # 이미지 전처리 로직을 구현하세요
-    # 예시: 이미지 크기 조정, 정규화 등
+    # 이미지 전처리
     image = image.resize((224, 224))
     image = np.array(image) / 255.0
     image = np.expand_dims(image, axis=0)
