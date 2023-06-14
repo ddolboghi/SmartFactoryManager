@@ -43,9 +43,9 @@ app.config['RESULT_FOLDER'] = RESULT_FOLDER
 
 def find_model():
     model_name = 'best.pt'
-    model_path = os.path.abspath(model_name)
-    if os.path.exists(model_path):
-        return model_path
+    yolo_path = os.path.abspath(model_name)
+    if os.path.exists(yolo_path):
+        return yolo_path
     else:
         print(f"Model file '{model_name}' not found in the current directory!")
         return None
@@ -54,12 +54,12 @@ def get_prediction(img_bytes):
     img = Image.open(io.BytesIO(img_bytes))
     imgs = [img]
     print(imgs)
-    results = model(imgs, size=640)
+    results = yolo_model(imgs, size=640)
 
     labels_and_probs = []
     for result in results.pred[0]:
         label = int(result[-1])
-        prob = float(result[-2])
+        prob = round(float(result[-2])* 100, 2)
         labels_and_probs.append((label, prob))
 
     # If no defects detected, consider the image as normal
@@ -83,24 +83,24 @@ def door():
         results.save(save_dir='static')
         filename = 'image0.jpg'
 
-        id_to_class = {0: '스크래치 불량입니다.', 1: '외관손상 불량입니다.'}
+        id_to_class = {0: '스크래치 불량', 1: '외관손상 불량'}
 
         class_names_and_probs = []
         for label, prob in labels_and_probs:
-            class_name = id_to_class.get(label, '해당 이미지는 정상입니다.')
+            class_name = id_to_class.get(label, '정상적인 도어입니다.')
             class_names_and_probs.append((class_name, prob))
 
-        return render_template('./door/result1.html', result_image=filename, model_name=model_name, class_names_and_probs=class_names_and_probs)
+        return render_template('./door/result1.html', result_image=filename, model_name=yolo_name, class_names_and_probs=class_names_and_probs)
 
     return render_template('./door/index.html')
 
 torch.hub._validate_not_a_forked_repo = lambda a, b, c: True
 
-model_name = find_model()
+yolo_name = find_model()
 
-if model_name is not None:
-    model = torch.hub.load('WongKinYiu/yolov7', 'custom', path_or_model=model_name)
-    model.eval()
+if yolo_name is not None:
+    yolo_model = torch.hub.load('WongKinYiu/yolov7', 'custom', path_or_model=yolo_name)
+    yolo_model.eval()
 
 # 승훈
 model_path = os.path.join(app.root_path, 'templates', 'molding', 'model.h5')

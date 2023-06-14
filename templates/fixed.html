@@ -99,7 +99,7 @@
                     }
                 });
             }
-});
+        });
 
 
         // 이미지 미리보기 함수
@@ -118,6 +118,20 @@
             $('#imagePreview').css('display', 'none'); // 이미지 선택이 취소된 경우 숨깁니다.
             }
         }  
+        
+        const imagePreview = document.getElementById('imagePreview');
+        const iconPreview = document.getElementById('iconPreview');
+
+        // 이미지가 로드될 때, 아이콘 숨기기
+        imagePreview.addEventListener('load', () => {
+            iconPreview.style.display = 'none';
+        });
+
+        // 이미지 로드가 취소되거나 에러 발생 시, 아이콘 표시
+        imagePreview.addEventListener('error', () => {
+            iconPreview.style.display = 'block';
+        });
+
 	</script>
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
