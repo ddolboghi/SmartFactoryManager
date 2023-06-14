@@ -7,35 +7,34 @@
 				<div class="section-title position-relative pb-3 mb-5">
 					<h1 class="mb-0" style="font-family: 'NotoSansKR-Bold';">윈드실드 몰딩 가스사출 공정 양품 판별</h1>
 				</div>
-				<form class="form-signin card mb-6 mt-5" method="post" enctype="multipart/form-data" action="/results">
-					<div class="d-flex align-items-center mb-4 wow fadeIn" data-wow-delay="0.6s">
-						<div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
-							<i class="bi bi-upload"></i>
+				<div class="bg-light rounded d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
+					<form class="form-signin" method="post" enctype="multipart/form-data" action="/results">
+						<div class="row g-3">
+							<div class="col-xl-12">
+								<input type="file" name="file" class="form-control-file" id="inputfile" onchange="previewImage(this);">
+							</div>
+							<p class="mb-4" style="font-family: 'NotoSansKR-Regular';">
+								자동차 윈드실드 사이드 몰딩 생산과정에서 촬영된 이미지는 가스 사출 공정 중 가스량에 따라 온도가 변화하는 몰딩의 열화상 이미지입니다. 몰딩 내부 공간의 넓이가 0.8mm~1.5mm 이면 양품, 그 외에는 불량품으로 판정합니다.
+							</p>
+							<div class="row g-0 mb-3">
+								<div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
+									<p class="mb-3"><i class="fa fa-check text-primary me-1"></i><img src="static\images\TensorFlow_logo.svg" alt="Jupyter Notebook" style="width: auto;height:50px;"></p>
+									<p class="mb-3"><i class="fa fa-check text-primary me-3"></i><img id="kamp_logo" src="static\images\kamp_logo.png" alt="KAMP"></p>
+								</div>
+								<div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
+									<p class="mb-3"><i class="fa fa-check text-primary me-3"></i><img src="static\images\Jupyter_logo.svg" alt="Jupyter Notebook" style="width: auto;height:40px;"></p>
+								</div>
+							</div>
+
+							<div class="col-12">
+								<button type="submit" id="uploadButton" class="btn btn-dark w-100 py-3">검사하기</button>
+							</div>
 						</div>
-						<div class="ps-4">
-							<input type="file" name="file" class="form-control-file" id="inputfile" onchange="previewImage(this);">
-						</div>
-					</div>
-					<button type="submit" id="uploadButton" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">
-						<span class="box">검사하기</span>
-					</button>
-				</form>
-				<p class="mb-4" style="font-family: 'NotoSansKR-Regular';">
-					자동차 윈드실드 사이드 몰딩 생산과정에서 촬영된 이미지는 가스 사출 공정 중 가스량에 따라 온도가 변화하는 몰딩의 열화상 이미지입니다. 몰딩 내부 공간의 넓이가 0.8mm~1.5mm 이면 양품, 그 외에는 불량품으로 판정합니다.
-				</p>
-				<div class="row g-0 mb-3">
-					<div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Convolutional Neural Network</h5>
-						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i><img src="static\images\kamp_logo.png" alt="KAMP 인공지능 중소벤처 제조플랫폼" style="background-color: #004c9c;"></h5>
-					</div>
-					<div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Google Cloud Platform</h5>
-						<h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Jupyter Notebook</h5>
-					</div>
+					</form>
 				</div>
 			</div>
 			<div class="col-lg-5" style="min-height: 500px;">
-				<div class="position-relative h-100">
+				<div class="position-relative h-100 border border-2">
 					<img id="imagePreview" class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="#" style="object-fit: cover;display:none;" alt="Windshield image">
 				</div>
 			</div>

@@ -10,8 +10,7 @@ import os
 # 시각화
 import seaborn as sns
 import matplotlib.pyplot as plt # matplotlib
-import librosa
-import pickle
+
 #도어용
 import io
 import torch

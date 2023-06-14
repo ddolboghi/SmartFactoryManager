@@ -26,8 +26,8 @@
 
 body {
     user-select: none;
-    padding: 0px; 
-    margin: 0px;
+    font-family: 'NotoSansKR-Regular';
+    min-height: 100vh;
 }
 
 #title {
@@ -66,5 +66,11 @@ body {
 
 #logo {
     width: auto;
-    height: 65px;
+    height: 70px;
+}
+
+#kamp_logo {
+    width: auto;
+    height:45px;
+    background-color: #091E3E;
 }

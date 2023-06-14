@@ -22,7 +22,7 @@
     <!-- Template Stylesheet -->
     <link href="../static/css/style.css" rel="stylesheet">
 </head>
-<body>
+<body class="d-flex flex-column">
     <!-- Navbar -->
     <div class="container-fluid position-relative p-0">
     	<nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
@@ -37,7 +37,6 @@
                     <a href="/" class="nav-item nav-link active">Home</a>
                     <a href="/door" class="nav-item nav-link">도어</a>
                     <a href="/molding" class="nav-item nav-link">윈드실드</a>
-                    <a href="/temp" class="nav-item nav-link"></a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="color: rgb(99, 99, 99);">열풍건조기계</a>
                         <div class="dropdown-menu m-0">
@@ -52,7 +51,7 @@
 	</div>
     <!-- Navbar End -->
 
-    <div class="content">
+    <div class="content flex-grow-1">
         {% block content %}{% endblock content %}
     </div>
 
@@ -73,15 +72,35 @@
 	<script>
 		// navbar 하단 바 고정시키기
 		const currentPage = window.location.pathname;
-		const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+        const navLinks = document.querySelectorAll(".navbar-nav .nav-item");
 
-		navLinks.forEach(link => {
-			if (link.getAttribute("href") === currentPage) {
-				link.classList.add("active");
-			} else {
-				link.classList.remove("active");
-			}
-		});
+        navLinks.forEach(link => {
+            const dropdownToggle = link.querySelector(".nav-link.dropdown-toggle");
+
+            if (link.getAttribute("href") === currentPage) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+
+            // Dropdown 항목에 대한 처리
+            if (link.querySelector(".dropdown-menu")) {
+                const dropdownItems = link.querySelectorAll(".dropdown-item");
+
+                dropdownItems.forEach(item => {
+                    if (item.getAttribute("href") === currentPage) {
+                        item.classList.add("active");
+                        // `.nav-link .dropdown-toggle` 요소에 active 클래스를 추가
+                        if (dropdownToggle) {
+                            dropdownToggle.classList.add("active");
+                        }
+                    } else {
+                        dropdownToggle.classList.remove("active");
+                    }
+                });
+            }
+});
+
 
         // 이미지 미리보기 함수
         function previewImage(input) {

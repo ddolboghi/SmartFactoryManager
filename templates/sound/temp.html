@@ -9,7 +9,7 @@
             flex-wrap: wrap;
             align-items: flex-start;
             justify-content: space-between;
-            width: 1200px;
+            width: 100%;
             margin: 20px auto;
         }
         #result-table-container {
@@ -64,6 +64,7 @@
             var tempData = [];
             var currentData = [];
             var xLabels = [];
+            var max_data_length = 20; // 그래프에 표시할 최대 데이터 개수
 
             // 각 행을 순차적으로 표시
             for (var i = 0; i < rows.length; i++) {
@@ -125,6 +126,10 @@
             // Temp 차트 생성 및 업데이트 함수
             function updateTempChart(tempData, xLabels) {
                 var ctx = document.getElementById('temp-chart').getContext('2d');
+                if (tempData.length > max_data_length) {
+                    tempData = tempData.slice(-max_data_length);
+                    xLabels = xLabels.slice(-max_data_length);
+                }
                 var data = {
                     labels: xLabels,
                     datasets: [{
@@ -172,6 +177,10 @@
             // Current 차트 생성 및 업데이트 함수
             function updateCurrentChart(currentData, xLabels) {
                 var ctx = document.getElementById('current-chart').getContext('2d');
+                if (currentData.length > max_data_length) {
+                    currentData = currentData.slice(-max_data_length);
+                    xLabels = xLabels.slice(-max_data_length);
+                }
                 var data = {
                     labels: xLabels,
                     datasets: [{
@@ -224,54 +233,63 @@
     </script>
 </head>
 <body>
-    <h1 style="text-align: center;">Drying Machine</h1>
-    <div id="container">
-        <div id="result-table-container">
-            <table id="result-table">
-                <colgroup>
-                    <col style="width: 100px;"> 
-                    <col style="width: 100px;"> 
-                    <col style="width: 100px;"> 
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th class="sticky">Lot Number</th>
-                        <th class="sticky">Temp</th>
-                        <th class="sticky">Current</th>
-                        <th class="sticky">Prediction</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in data %}
-                    {% if row['NG'] == "불량" %}
-                    <tr class="defective-row" style="opacity: 0;">
-                        <td>{{ row['Process'] }}</td>
-                        <td>{{ row['Temp']|round(3) }}</td>
-                        <td>{{ row['Current']|round(3) }}</td>
-                        <td>{{ row['NG'] }}</td>
-                    </tr>
-                    {% else %}
-                    <tr style="opacity: 0;">
-                        <td>{{ row['Process'] }}</td>
-                        <td>{{ row['Temp']|round(3) }}</td>
-                        <td>{{ row['Current']|round(3) }}</td>
-                        <td>{{ row['NG'] }}</td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg">
+                    <div class="section-title position-relative pb-3 mb-5">
+                        <h1 class="mb-0" style="font-family: 'NotoSansKR-Bold';">열풍건조 설비 내 공정 온도 및 전압을 활용한 이상탐지</h1>
+                    </div>
+                    <div id="container" class="bg-light">
+                        <div id="result-table-container" class="flex-grow-1">
+                            <table id="result-table">
+                                <colgroup>
+                                    <col style="width: 100px;"> 
+                                    <col style="width: 100px;"> 
+                                    <col style="width: 100px;"> 
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="sticky">Lot Number</th>
+                                        <th class="sticky">Temp</th>
+                                        <th class="sticky">Current</th>
+                                        <th class="sticky">Prediction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in data %}
+                                    {% if row['NG'] == "불량" %}
+                                    <tr class="defective-row" style="opacity: 0;">
+                                        <td>{{ row['Process'] }}</td>
+                                        <td>{{ row['Temp']|round(3) }}</td>
+                                        <td>{{ row['Current']|round(3) }}</td>
+                                        <td>{{ row['NG'] }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr style="opacity: 0;">
+                                        <td>{{ row['Process'] }}</td>
+                                        <td>{{ row['Temp']|round(3) }}</td>
+                                        <td>{{ row['Current']|round(3) }}</td>
+                                        <td>{{ row['NG'] }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="chart" style="width: 35%;padding-left: 20px;">
+                            <canvas id="result-chart"></canvas>
+                        </div>
+                        <div class="chart" style="width: 50%;">
+                            <canvas id="temp-chart"></canvas>
+                        </div>
+                        <div class="chart" style="width: 50%;">
+                            <canvas id="current-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="chart" style="width: 35%;">
-            <canvas id="result-chart"></canvas>
-        </div>
-        <div class="chart" style="width: 50%;">
-            <canvas id="temp-chart"></canvas>
-        </div>
-        <div class="chart" style="width: 50%;">
-            <canvas id="current-chart"></canvas>
-        </div>
-
     </div>
 </body>
 {% endblock content %}
