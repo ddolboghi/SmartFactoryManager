@@ -1,23 +1,219 @@
 {% extends 'fixed.html' %}
 {% block content %}
-{% if results %}
-<h2>Uploaded Images and Predictions</h2>
-{% for result in results %}
-{% set image_filename = result['image_file'] %}
-{% set image_number = image_filename.split('_')[1].split('.')[0] %}
-<h3>Image: {{ image_number }}</h3>
-{% set image_path = 'images/Thermal_images/' + image_filename %}
-{% if '불량품' in image_filename %}
-{% set prediction_result = '불량품' %}
-{% else %}
-{% set prediction_result = '양품' %}
-{% endif %}
-<p>Prediction: {{ prediction_result }}</p>
-<img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image">
-{% endfor %}
-{% endif %}
+<head>
+    <style>
+        /* CSS 스타일 */
+        #container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 1200px;
+            margin: 20px auto;
+        }
+        #result-table-container {
+            width: 30%;
+            overflow-x: hidden; 
+            overflow-y: auto; 
+            border: 1px solid #ccc;
+            padding: 8px;
+            max-height: 400px;
+            position: relative;
+        }
+        #result-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #result-table th,
+        #result-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ccc;
+            white-space: nowrap; /* Prevent line breaks */
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .sticky {
+            position: sticky;
+            top: 0;
+            background-color: #a5d6a7;
+            z-index: 1;
+        }
+        .defective-row {
+            background-color: yellow!important;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(1, 1fr);
+            gap: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
 
+        .row {
+        overflow: hidden;
+        }
+
+        .image-container {
+            margin: 0 40px 0 20px;
+            border: 5px solid #a5d6a7;
+        }
+
+        #image-card {
+            margin-top: 3%;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // JavaScript 코드
+        document.addEventListener('DOMContentLoaded', function() {
+            var rows = document.querySelectorAll('#result-table tbody tr');
+            var imageCurrent = document.getElementById('image-current');
+            var delay = 1000;  // 1초 지연
+            var normalCount = 0;
+            var defectiveCount = 0;
+
+            // 각 행을 순차적으로 표시
+            for (var i = 0; i < rows.length; i++) {
+                (function(index) {
+                    setTimeout(function() {
+                        // 현재 시간을 계산하고 업데이트
+                        var currentTime = new Date();
+                        var formattedTime = currentTime.toISOString().slice(11, 19).replace('T', ' ');
+
+                        rows[index].style.opacity = '1';
+                        // 정상과 불량 카운트 업데이트
+                        var imageName = rows[index].querySelector('td:nth-child(3)').innerText;
+                        // 이미지 업데이트
+                        
+                        if (imageName.includes('양품')) {
+                            normalCount++;
+                        } else if (imageName.includes('불량품')) {
+                            defectiveCount++;
+                        }
+                        rows[index].dataset.timestamp = formattedTime;
+                        rows[index].querySelector('td:first-child').innerText = formattedTime;
+                        let root_path = "{{ url_for('static', filename='images/Thermal_images/') }}";
+
+                        var imagePath = root_path + imageName;
+                        imageCurrent.querySelector('img').src = imagePath;
+                        imageCurrent.querySelector('img').alt = imageName;
+
+                        // 차트 업데이트
+                        updateChart(normalCount, defectiveCount);
+                    }, delay * (index + 1));
+                })(i);
+            }
+
+            // 수직 스크롤
+            var resultTableContainer = document.getElementById('result-table-container');
+            setInterval(function() {
+            var maxScroll = resultTableContainer.scrollHeight - resultTableContainer.clientHeight;
+            var currentScroll = resultTableContainer.scrollTop;
+
+            if (currentScroll + resultTableContainer.clientHeight >= maxScroll) {
+             // If reaching the end, scroll back to the top
+             resultTableContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // Scroll to the next position
+                resultTableContainer.scrollTo({ top: currentScroll + resultTableContainer.clientHeight, behavior: 'smooth' });
+            }
+            }, 9300);
+
+            // 차트 생성 및 업데이트 함수
+            function updateChart(normalCount, defectiveCount) {
+                var ctx = document.getElementById('result-chart').getContext('2d');
+                var data = {
+                    labels: ['양품', '불량품'],
+                    datasets: [{
+                        data: [normalCount, defectiveCount],
+                        backgroundColor: ['#3189c4', '#ffcc00'],
+                        hoverBackgroundColor: ['#3189c4', '#ffcc00']
+                    }]
+                };
+
+                if (window.resultChart) {
+                    // 차트가 이미 생성되었다면 업데이트
+                    window.resultChart.data.datasets[0].data = [normalCount, defectiveCount];
+                    window.resultChart.update();
+                } else {
+                    // 차트 생성
+                    window.resultChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: data
+                    });
+                }
+            }
+
+            // 페이지 로딩 시 초기 차트 생성
+            updateChart(normalCount, defectiveCount);
+        });
+    </script>
+</head>
+<body>
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg">
+                    <div class="section-title position-relative pb-3 mb-5">
+                        <h1 class="mb-0" style="font-family: 'NotoSansKR-Bold';">윈드실드 사이드 몰딩의 <br>가스사출 성형 공정에서 양품 판별</h1>
+                    </div>
+                    <div id="container" class="bg-light">
+                        <div id="image-card" class="d-flex flex-column align-items-center">
+                            <h4>열화상 이미지</h4>
+                            <div id="image-current" class="image-container">
+                                <img src="" alt="Image"/>
+                            </div>
+                        </div>
+                        <div id="result-table-container" class="flex-grow-1">
+                            <table id="result-table" >
+                                <colgroup>
+                                    <col style="width: 100px;">
+                                    <col style="width: 100px;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="sticky">Time</th>
+                                        <th class="sticky">Prediction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for d in data %}
+                                    {% if d['prediction'] == '정상' %}
+                                    <tr style="opacity: 0;" data-timestamp="">
+                                        <td></td>
+                                        <td>정상</td>
+                                        <td style="display: none;">{{ d['img'] }}</td>
+                                    </tr>
+                                    {% elif d['prediction'] == '불량' %}
+                                    <tr class="defective-row" style="opacity: 0;" data-timestamp="">
+                                        <td></td>
+                                        <td>불량</td>
+                                        <td style="display: none;">{{ d['img'] }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr style="opacity: 0;" data-timestamp="">
+                                        <td></td>
+                                        <td>Unknown</td>
+                                        <td style="display: none;">{{ d['img'] }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="chart flex-grow-1" style="width: 30%;padding-left: 20px;">
+                            <canvas id="result-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 {% endblock content %}
-
-
-

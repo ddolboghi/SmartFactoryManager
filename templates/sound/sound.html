@@ -1,7 +1,6 @@
 {% extends 'fixed.html' %}
 {% block content %}
 <head>
-    <title>Sound Data</title>
     <style>
         #container {
             display: flex;
@@ -363,25 +362,3 @@
     </div>
 </body>
 {% endblock content %}
-
-<!-- var ctx = document.getElementById('result-chart').getContext('2d');
-var data = {
-    labels: ['정상', '불량'],
-    datasets: [{
-        data: [normalCount, defectiveCount],
-        backgroundColor: ['#3189c4', '#ffcc00'],
-        hoverBackgroundColor: ['#3189c4', '#ffcc00']
-    }]
-};
-
-if (window.resultChart) {
-    // 차트가 이미 생성되었다면 업데이트
-    window.resultChart.data.datasets[0].data = [normalCount, defectiveCount];
-    window.resultChart.update();
-} else {
-    // 차트 생성
-    window.resultChart = new Chart(ctx, {
-        type: 'pie',
-        data: data
-    });
-} -->

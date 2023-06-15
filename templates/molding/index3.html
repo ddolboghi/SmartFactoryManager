@@ -1,46 +1,31 @@
 {% extends 'fixed.html' %}
 {% block content %}
-<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-	<div class="container py-5">
-		<div class="row g-5">
-			<div class="col-lg-7">
-				<div class="section-title position-relative pb-3 mb-5">
-					<h1 class="mb-0" style="font-family: 'NotoSansKR-Bold';">윈드실드 몰딩 가스사출 공정 양품 판별</h1>
-				</div>
-				<div class="bg-light rounded d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
-					<form class="form-signin" method="post" enctype="multipart/form-data" action="/results">
-						<div class="row g-3">
-							<div class="col-xl-12">
-								<input type="file" name="file" class="form-control-file" id="inputfile" onchange="previewImage(this);">
-							</div>
-							<p class="mb-4" style="font-family: 'NotoSansKR-Regular';">
-								자동차 윈드실드 사이드 몰딩 생산과정에서 촬영된 이미지는 가스 사출 공정 중 가스량에 따라 온도가 변화하는 몰딩의 열화상 이미지입니다. 몰딩 내부 공간의 넓이가 0.8mm~1.5mm 이면 양품, 그 외에는 불량품으로 판정합니다.
-							</p>
-							<div class="row g-0 mb-3">
-								<div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-									<p class="mb-3"><i class="fa fa-check text-primary me-1"></i><img src="static\images\TensorFlow_logo.svg" alt="Jupyter Notebook" style="width: auto;height:50px;"></p>
-									<p class="mb-3"><i class="fa fa-check text-primary me-3"></i><img id="kamp_logo" src="static\images\kamp_logo.png" alt="KAMP"></p>
-								</div>
-								<div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-									<p class="mb-3"><i class="fa fa-check text-primary me-3"></i><img src="static\images\Jupyter_logo.svg" alt="Jupyter Notebook" style="width: auto;height:40px;"></p>
-								</div>
-							</div>
+<h1>Results</h1>
 
-							<div class="col-12">
-								<button type="submit" id="uploadButton" class="btn btn-dark w-100 py-3">검사하기</button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class="col-lg-5" style="min-height: 500px;">
-				<div class="position-relative h-100 border border-2 d-flex align-items-center justify-content-center">
-					<i id="iconPreview" class="fa-regular fa-image position-absolute"></i>
-					<img id="imagePreview" class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="#" style="object-fit: contain;display:none;" alt="Windshield image">
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+{% if results %}
+<h2>Uploaded Images and Predictions</h2>
+{% for result in results %}
+{% set image_filename = result['image_file'] %}
+{% set image_number = image_filename.split('left_불량품')[1].split('.')[0] %}
+<h3>Image: {{ image_number }}</h3>
 
+<img src="{{ url_for('static', filename='Thermal_images/' + result['image_file']) }}" alt="Uploaded Image">
+<p>Prediction: {{ '양품' if result['prediction'][0] > result['prediction'][1] else '불량품' }}</p>
+{% endfor %}
+{% endif %}
+
+<form class="form-signin card mb-6" method="post" enctype="multipart/form-data" action="/results">
+	<h1 class="h3 mb-3 font-weight-bold">Please upload pictures of WindShield!</h1>
+	<input type="file" name="file" class="form-control-file" id="inputfile" multiple>
+	<div class="mt-2"></div>
+	<button type="submit" class="btn btn-primary">
+		<span class="box">
+			Upload!
+		</span>
+	</button>
+	<p class="mt-5 mb-3 text-muted custom-text">
+		Please upload images of WindShield for defect detection.
+	</p>
+</form>
+</form>
 {% endblock content %}

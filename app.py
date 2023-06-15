@@ -2,14 +2,12 @@
 from flask import Flask, request, render_template, redirect, url_for
 from tensorflow.keras.models import load_model
 from sklearn.metrics import *
-# 데이터 분석 툴
 import pandas as pd
 import numpy as np
-# 운영체계와 관련된 툴
 import os
 # 시각화
 import seaborn as sns
-import matplotlib.pyplot as plt # matplotlib
+import matplotlib.pyplot as plt
 
 #도어용
 import io
@@ -111,46 +109,52 @@ def allowed_file(filename):
 
 @app.route('/molding', methods=['GET', 'POST'])
 def windshield_molding():
-    return render_template('molding/index3.html')
+    result_data = pd.read_csv("./molding_result.csv")
 
-@app.route('/results', methods=['POST'])
-def results():
-    if 'file' not in request.files:
-        return redirect(url_for('molding'))
+    # Convert DataFrame to a list of dictionaries
+    data = result_data.to_dict('records')
+    random.shuffle(data)
 
-    files = request.files.getlist('file')
+    return render_template('molding/results.html', data=data)
 
-    results = []
+# @app.route('/results', methods=['POST'])
+# def results():
+#     if 'file' not in request.files:
+#         return redirect(url_for('molding'))
 
-    for file in files:
-        image = Image.open(file)
-        # 이미지 처리
-        processed_image = preprocess_image(image)
-        # 예측
-        result = model.predict(processed_image)
-        result = result.flatten()
-        results.append({'image_file': file.filename, 'prediction': result})
+#     files = request.files.getlist('file')
 
-    return render_template('molding/results.html', results=results)
+#     results = []
+
+#     for file in files:
+#         image = Image.open(file)
+#         # 이미지 처리
+#         processed_image = preprocess_image(image)
+#         # 예측
+#         result = model.predict(processed_image)
+#         result = result.flatten()
+#         results.append({'image_file': file.filename, 'prediction': result})
+
+#     return render_template('molding/results.html', results=results)
 
 
-def preprocess_image(image):
-    # 이미지 전처리
-    image = image.resize((224, 224))
-    image = np.array(image) / 255.0
-    image = np.expand_dims(image, axis=0)
-    return image
+# def preprocess_image(image):
+#     # 이미지 전처리
+#     image = image.resize((224, 224))
+#     image = np.array(image) / 255.0
+#     image = np.expand_dims(image, axis=0)
+#     return image
 
-def predict(image):
-    # 모델 예측
-    prediction = model.predict(image)
-    return prediction
+# def predict(image):
+#     # 모델 예측
+#     prediction = model.predict(image)
+#     return prediction
 
-def file_exists(file_path):
-    return os.path.exists(file_path)
+# def file_exists(file_path):
+#     return os.path.exists(file_path)
 
-# Register the custom filter in the Jinja2 environment
-app.jinja_env.filters['file_exists'] = file_exists
+# # Register the custom filter in the Jinja2 environment
+# app.jinja_env.filters['file_exists'] = file_exists
 
 # 재윤 
 @app.route('/temp')
@@ -181,18 +185,6 @@ def drying():
 
     # Render the result in an HTML template
     return render_template('sound/sound.html', data=data)
-
-
-
-
-
-
-    
-    
-@app.route('/ques_concern', methods=['GET', 'POST'])
-def question_type():        
-    return render_template('index3.html')
-
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
