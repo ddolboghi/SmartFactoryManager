@@ -35,10 +35,11 @@ def start():
     return render_template('main.html')
 
 
-# 민경
 RESULT_FOLDER = os.path.join('static')
 app.config['RESULT_FOLDER'] = RESULT_FOLDER
 
+#############################################################################
+# yolo
 def find_model():
     model_name = 'best.pt'
     yolo_path = os.path.abspath(model_name)
@@ -99,6 +100,8 @@ yolo_name = find_model()
 if yolo_name is not None:
     yolo_model = torch.hub.load('WongKinYiu/yolov7', 'custom', path_or_model=yolo_name)
     yolo_model.eval()
+
+#############################################################################3
 
 # 승훈
 model_path = os.path.join(app.root_path, 'templates', 'molding', 'model.h5')
