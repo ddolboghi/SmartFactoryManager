@@ -38,7 +38,7 @@ def start():
 RESULT_FOLDER = os.path.join('static')
 app.config['RESULT_FOLDER'] = RESULT_FOLDER
 
-#############################################################################
+
 # yolo
 def find_model():
     model_name = 'best.pt'
@@ -80,7 +80,7 @@ def door():
         img_bytes = file.read()
         results, labels_and_probs = get_prediction(img_bytes)
         results.save(save_dir='static')
-        filename = 'image0.jpg'
+        filename = './static/images/image0.jpg'
 
         id_to_class = {0: '스크래치 불량', 1: '외관손상 불량'}
 
@@ -101,7 +101,6 @@ if yolo_name is not None:
     yolo_model = torch.hub.load('WongKinYiu/yolov7', 'custom', path_or_model=yolo_name)
     yolo_model.eval()
 
-#############################################################################3
 
 # 승훈
 model_path = os.path.join(app.root_path, 'templates', 'molding', 'model.h5')
@@ -112,7 +111,7 @@ def allowed_file(filename):
 
 @app.route('/molding', methods=['GET', 'POST'])
 def windshield_molding():
-    result_data = pd.read_csv("./molding_result.csv")
+    result_data = pd.read_csv("./static/data/molding_result.csv")
 
     # Convert DataFrame to a list of dictionaries
     data = result_data.to_dict('records')
@@ -120,49 +119,11 @@ def windshield_molding():
 
     return render_template('molding/results.html', data=data)
 
-# @app.route('/results', methods=['POST'])
-# def results():
-#     if 'file' not in request.files:
-#         return redirect(url_for('molding'))
-
-#     files = request.files.getlist('file')
-
-#     results = []
-
-#     for file in files:
-#         image = Image.open(file)
-#         # 이미지 처리
-#         processed_image = preprocess_image(image)
-#         # 예측
-#         result = model.predict(processed_image)
-#         result = result.flatten()
-#         results.append({'image_file': file.filename, 'prediction': result})
-
-#     return render_template('molding/results.html', results=results)
-
-
-# def preprocess_image(image):
-#     # 이미지 전처리
-#     image = image.resize((224, 224))
-#     image = np.array(image) / 255.0
-#     image = np.expand_dims(image, axis=0)
-#     return image
-
-# def predict(image):
-#     # 모델 예측
-#     prediction = model.predict(image)
-#     return prediction
-
-# def file_exists(file_path):
-#     return os.path.exists(file_path)
-
-# # Register the custom filter in the Jinja2 environment
-# app.jinja_env.filters['file_exists'] = file_exists
 
 # 재윤 
 @app.route('/temp')
 def temp():
-    result_data = pd.read_csv("./result.csv")
+    result_data = pd.read_csv("./static/data/result.csv")
 
     # Convert DataFrame to a list of dictionaries
     data = result_data.to_dict('records')
@@ -172,15 +133,10 @@ def temp():
     return render_template('sound/temp.html', data=data)
 
 
-
-
-
-
-
 # 오준
 @app.route('/drying')
 def drying():
-    result_data = pd.read_csv("./sound_result.csv")
+    result_data = pd.read_csv("./static/data/sound_result.csv")
 
     # Convert DataFrame to a list of dictionaries
     data = result_data.to_dict('records')
